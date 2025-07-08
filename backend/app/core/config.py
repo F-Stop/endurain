@@ -17,6 +17,7 @@ FILES_DIR = "files"
 FILES_PROCESSED_DIR = "files/processed"
 FILES_BULK_IMPORT_DIR = "files/bulk_import"
 SUPPORTED_FILE_FORMATS = [".fit", ".gpx"]  # used to screen bulk import files
+BULK_IMPORT_STRAVA_ACTIVITIES_FILE_LOC = "files/bulk_import/activities.csv" # Location of the activities.csv file that comes with Strava's bulk data export
 
 def check_required_env_vars():
     required_env_vars = [
