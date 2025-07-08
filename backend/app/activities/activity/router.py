@@ -569,24 +569,21 @@ async def create_activity_with_bulk_import(
         # Ensure the 'bulk_import' directory exists
         bulk_import_dir = core_config.FILES_BULK_IMPORT_DIR
         supported_file_formats = core_config.SUPPORTED_FILE_FORMATS
+        strava_activities_file = core_config.BULK_IMPORT_STRAVA_ACTIVITIES_FILE_LOC
         os.makedirs(bulk_import_dir, exist_ok=True)
 
-        # Looking for Strava's bulk-export file - default name is activities.csv - hard coding it here.  CHANGE LATER TO VARIABLE.
         # Using Python's core CSV module here - https://docs.python.org/3/library/csv.html
-        strava_activities_file = os.path.join(bulk_import_dir, "activities.csv")  
         core_logger.print_to_log_and_console(f"Strava activities file should be at: {strava_activities_file}")
         if os.path.isfile(strava_activities_file):
             core_logger.print_to_log_and_console(f"Strava activities file present. Going to try to parse it.")
             try:
+                strava_activities_dict = {}
                 with open(strava_activities_file, newline='') as csvfile:
-                    #strava_base = csv.Reader(csvfile)
-                    strava_activities_dict = {}
                     strava_activities_csv = csv.DictReader(csvfile)
-                    # While the file is still open need to process this CSV object - it will reset to length 0 if file is closed
-                    for row in strava_activities_csv:
+                    for row in strava_activities_csv:    # Must process file while file is still open.
                         strava_activities_dict[row['Activity ID']] = row
                 core_logger.print_to_log_and_console(f"Strava activities csv file parsed")
-                core_logger.print_to_log_and_console(f"example row: {strava_activities_dict["14048645234"]["Activity Description"]}")
+                core_logger.print_to_log_and_console(f"Strava activities csv file example row: {strava_activities_dict["14048645234"]["Activity Description"]}")
             except:
                 strava_activities_dict = None
                 core_logger.print_to_log_and_console(f"WARNING: Strava activities CSV parsing failed.")
