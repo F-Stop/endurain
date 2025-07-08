@@ -264,6 +264,7 @@ def parse_and_store_activity_from_file(
     db: Session,
     from_garmin: bool = False,
     garminconnect_gear: dict = None,
+    strava_activities: dict = None,  
 ):
     try:
         # Get file extension

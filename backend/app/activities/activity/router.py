@@ -592,7 +592,7 @@ async def create_activity_with_bulk_import(
         for filename in os.listdir(bulk_import_dir):
             file_path = os.path.join(bulk_import_dir, filename)
 
-            # Check if file is one we can process - by adding in Strava .csv files we will blow up if we don't filter by file type here.
+            # Check if file is one we can process - by adding in Strava .csv file to that directory we will blow up if we don't filter by file type here.
             _, file_extension = os.path.splitext(file_path)
             if file_extension not in supported_file_formats:
                 core_logger.print_to_log_and_console(f"Skipping file {file_path} due to not having the a supported file extension, which are: {supported_file_formats}.")
@@ -607,7 +607,10 @@ async def create_activity_with_bulk_import(
                     token_user_id,
                     file_path,
                     db,
-                )
+                    False,
+                    None,
+                    strava_activities_dict  # Adding this to pass dictionary, but function already had two other items needed (from garmin and garmin gear), so had to add them explicitly above.
+                )  
 
         # Return a success message
         return {"Bulk import initiated. Processing files in the background."}
