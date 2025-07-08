@@ -582,8 +582,8 @@ async def create_activity_with_bulk_import(
                     strava_activities_csv = csv.DictReader(csvfile)
                     for row in strava_activities_csv:    # Must process file while file is still open.
                         strava_activities_dict[row['Activity ID']] = row
-                core_logger.print_to_log_and_console(f"Strava activities csv file parsed")
-                core_logger.print_to_log_and_console(f"Strava activities csv file example row: {strava_activities_dict["14048645234"]["Activity Description"]}")
+                core_logger.print_to_log_and_console(f"Strava activities csv file parsed, and it is {len(strava_activities_dict)} rows long")
+                #core_logger.print_to_log_and_console(f"Strava activities csv file example row: {strava_activities_dict["14048645234"]["Activity Description"]}")  # Testing line.
             except:
                 strava_activities_dict = None
                 core_logger.print_to_log_and_console(f"WARNING: Strava activities CSV parsing failed.")
