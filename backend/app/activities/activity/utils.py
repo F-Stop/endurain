@@ -264,11 +264,13 @@ def parse_and_store_activity_from_file(
     db: Session,
     from_garmin: bool = False,
     garminconnect_gear: dict = None,
-    strava_activities: dict = None,  
+    strava_activities: dict = None,  # format strava_activities["Activity ID"]["column header from Strava spreadsheet"]
 ):
     try:
         # Get file extension
-        _, file_extension = os.path.splitext(file_path)
+        file_remainder, file_extension = os.path.splitext(file_path)
+        _, file_base_name = os.path.split(file_remainder)
+        core_logger.print_to_log_and_console(f"File name without extension is (this will be the activity number if a strava bulk export): {file_base_name}")
         garmin_connect_activity_id = None
 
         if from_garmin:
@@ -297,6 +299,17 @@ def parse_and_store_activity_from_file(
                 file_path,
                 db,
             )
+
+            # Check if this is a Strava bulk import.  If so, see if item has more information present in the Strava activities.csv
+            if strava_activities:
+                core_logger.print_to_log_and_console(f"Entering Strava activities section for activity: {file_base_name}")
+                #core_logger.print_to_log_and_console(f"Strava activities value for this: {strava_activities[file_base_name]}")
+                if strava_activities.get(file_base_name):
+                    core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary")
+                #if file_base_name in strava_activities.values():  # Does not work for some reason
+                #    core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary - method 2")
+                # MORE TO DO HERE - Calling it a night.
+                # Grab core info from dictionary and put into parsed_info
 
             if parsed_info is not None:
                 created_activities = []
