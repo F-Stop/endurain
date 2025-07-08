@@ -269,7 +269,7 @@ def parse_and_store_activity_from_file(
     try:
         # Get file extension
         file_remainder, file_extension = os.path.splitext(file_path)
-        _, file_base_name = os.path.split(file_remainder)
+        _, file_base_name = os.path.split(file_remainder)      # Getting file name without the extension, as this base name is the activity ID for Strava bulk exports.
         core_logger.print_to_log_and_console(f"File name without extension is (this will be the activity number if a strava bulk export): {file_base_name}")
         garmin_connect_activity_id = None
 
@@ -300,11 +300,11 @@ def parse_and_store_activity_from_file(
                 db,
             )
 
-            # Check if this is a Strava bulk import.  If so, see if item has more information present in the Strava activities.csv
+            # Check if this is a Strava bulk import.
             if strava_activities:
-                core_logger.print_to_log_and_console(f"Entering Strava activities section for activity: {file_base_name}")
-                #core_logger.print_to_log_and_console(f"Strava activities value for this: {strava_activities[file_base_name]}")
-                if strava_activities.get(file_base_name):
+                #core_logger.print_to_log_and_console(f"Entering Strava activities section for activity: {file_base_name}") # testing code
+                #core_logger.print_to_log_and_console(f"Strava activities value for this: {strava_activities[file_base_name]}") # Testing code
+                if strava_activities.get(file_base_name):  # check if the file has a row in the strava activities dictionary
                     core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary")
                 #if file_base_name in strava_activities.values():  # Does not work for some reason
                 #    core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary - method 2")
