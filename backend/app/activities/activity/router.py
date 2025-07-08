@@ -567,6 +567,7 @@ async def create_activity_with_bulk_import(
     try:
         # Ensure the 'bulk_import' directory exists
         bulk_import_dir = core_config.FILES_BULK_IMPORT_DIR
+        supported_file_formats = core_config.SUPPORTED_FILE_FORMATS
         os.makedirs(bulk_import_dir, exist_ok=True)
 
         # Looking for Strava's bulk-export file - default name is activities.csv - hard coding it here.  CHANGE LATER TO VARIABLE.
@@ -579,9 +580,8 @@ async def create_activity_with_bulk_import(
 
             # Check if file is one we can process - by adding in Strava .csv files we will blow up if we don't filter by file type here.
             _, file_extension = os.path.splitext(file_path)
-            core_logger.print_to_log_and_console(f"File extension is: {file_extension}")
-            if file_extension not in [".fit", ".gpx"]:   # HARD CODED LIST OF FILES SUPPORTED HERE - move elsewhere later.
-                core_logger.print_to_log_and_console(f"Skipping file {file_path} due to not having the correct extension.")
+            if file_extension not in supported_file_formats:
+                core_logger.print_to_log_and_console(f"Skipping file {file_path} due to not having the a supported file extension, which are: {supported_file_formats}.")
                 continue
 
             if os.path.isfile(file_path):
