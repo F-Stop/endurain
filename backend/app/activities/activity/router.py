@@ -582,6 +582,7 @@ async def create_activity_with_bulk_import(
                 with open(strava_activities_file, newline='') as csvfile:
                     strava_activities_csv = csv.DictReader(csvfile)
                     #count = 0  # Testing code
+                    # TO DO - Need to check if there is a 'Filename' header and cleanly abort if there is not one.
                     for row in strava_activities_csv:    # Must process CSV file object while file is still open.
                         _, strava_act_file_name = os.path.split(row['Filename'])  # strips path, returns filename with extension.
                         strava_activities_dict[strava_act_file_name] = row
