@@ -268,9 +268,9 @@ def parse_and_store_activity_from_file(
 ):
     try:
         # Get file extension
-        file_remainder, file_extension = os.path.splitext(file_path)
-        _, file_base_name = os.path.split(file_remainder)      # Getting file name without the extension, as this base name is the activity ID for Strava bulk exports.
-        core_logger.print_to_log_and_console(f"File name without extension is (this will be the activity number if a strava bulk export): {file_base_name}")
+        _, file_extension = os.path.splitext(file_path)
+        _, file_base_name = os.path.split(file_path)      # Getting pathless file-name with extension, as this is the dictionary key for Strava's activities dictionary.
+        core_logger.print_to_log_and_console(f"File name with extension is (this is the dictionary key): {file_base_name}")
         garmin_connect_activity_id = None
 
         if from_garmin:
@@ -303,13 +303,43 @@ def parse_and_store_activity_from_file(
             # Check if this is a Strava bulk import.
             if strava_activities:
                 #core_logger.print_to_log_and_console(f"Entering Strava activities section for activity: {file_base_name}") # testing code
-                #core_logger.print_to_log_and_console(f"Strava activities value for this: {strava_activities[file_base_name]}") # Testing code
                 if strava_activities.get(file_base_name):  # check if the file has a row in the strava activities dictionary
                     core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary")
-                #if file_base_name in strava_activities.values():  # Does not work for some reason
-                #    core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary - method 2")
-                # MORE TO DO HERE - Calling it a night.
-                # Grab core info from dictionary and put into parsed_info
+                    core_logger.print_to_log_and_console(f"Strava activities values for this: {strava_activities[file_base_name]}") # Testing code
+                    #core_logger.print_to_log_and_console(f"parsed_info is {parsed_info} and its activity is {parsed_info["activity"]}") # Testing code
+
+                    # Strava already puts title in the gpx file.
+
+                    # Get description
+                    #core_logger.print_to_log_and_console(f"parsed_info's description was: {parsed_info["activity"].description}")     # Testing code
+                    parsed_info["activity"].description = strava_activities[file_base_name]["Activity Description"]
+                    #core_logger.print_to_log_and_console(f"parsed_info's description is now: {parsed_info["activity"].description}")  # Testing code
+
+                    # Get activity type 
+                    # parsed info Schema: activity.activity_type: int
+                    # strava schema: strava_activities[file_base_name]["Activity Type"] : string
+                    # STILL TO DO
+
+                    # Get equipment 
+                    # parsed info Schema: activity.gear_id: int
+                    # strava schema: strava_activities[file_base_name]["Activity Gear"] : string
+                    # STILL TO DO
+
+                    # Get Strava activity id 
+                    # parsed info Schema: activity.strava_activity_id: int
+                    # strava schema: strava_activities[file_base_name]["Activity ID"] : string?
+                    # STILL TO DO
+                    # QUESTION: Will inserting the Strava Activity ID make the strava-syncing portion think this is synced from Strava?
+                    # QUESTION: Do we need a flag for "we have imported this from a bulk import" to differentiate this from Strava sync'ing?
+
+                    # Strava cropping information
+                    #   Not sure how strava saves cropping information - activities.csv only has "Activity Date" and  "Elapsed Time"
+
+                    # Strava media - being ignored for now.
+                    # strava schema: strava_activities[file_base_name]["Media"] : string that is a "|" separated list of file names
+
+                    # wrap up the processing.
+                    core_logger.print_to_log_and_console(f"Strava information saved for activity {file_base_name}.")
 
             if parsed_info is not None:
                 created_activities = []
