@@ -569,10 +569,11 @@ async def create_activity_with_bulk_import(
         # Ensure the 'bulk_import' directory exists
         bulk_import_dir = core_config.FILES_BULK_IMPORT_DIR
         supported_file_formats = core_config.SUPPORTED_FILE_FORMATS
-        strava_activities_file = core_config.BULK_IMPORT_STRAVA_ACTIVITIES_FILE_LOC
         os.makedirs(bulk_import_dir, exist_ok=True)
 
+        # Importing data from Strava activities file, if it is present.
         # Using Python's core CSV module here - https://docs.python.org/3/library/csv.html
+        strava_activities_file = core_config.BULK_IMPORT_STRAVA_ACTIVITIES_FILE_LOC
         core_logger.print_to_log_and_console(f"Strava activities file should be at: {strava_activities_file}")
         if os.path.isfile(strava_activities_file):
             core_logger.print_to_log_and_console(f"Strava activities file present. Going to try to parse it.")
@@ -580,10 +581,16 @@ async def create_activity_with_bulk_import(
                 strava_activities_dict = {}
                 with open(strava_activities_file, newline='') as csvfile:
                     strava_activities_csv = csv.DictReader(csvfile)
-                    for row in strava_activities_csv:    # Must process file while file is still open.
-                        strava_activities_dict[row['Activity ID']] = row
+                    #count = 0  # Testing code
+                    for row in strava_activities_csv:    # Must process CSV file object while file is still open.
+                        _, strava_act_file_name = os.path.split(row['Filename'])  # strips path, returns filename with extension.
+                        strava_activities_dict[strava_act_file_name] = row
+                        #strava_activities_dict[row['Activity ID']] = row # First attempt - Strava's activity ID makes some sense, but file name is probably more robust for our import purposes. 
+                        #core_logger.print_to_log_and_console(f"Whole filename: {row['Filename']} and split filename {strava_act_file_name}") # Testing code
+                        #count += 1  # Testing code
+                        #if count == 5: break # Testing code
                 core_logger.print_to_log_and_console(f"Strava activities csv file parsed, and it is {len(strava_activities_dict)} rows long")
-                #core_logger.print_to_log_and_console(f"Strava activities csv file example row: {strava_activities_dict["14048645234"]["Activity Description"]}")  # Testing line.
+                #core_logger.print_to_log_and_console(f"Strava activities csv file example row: {strava_activities_dict["14048645234.gpx"]["Activity Description"]}")  # Testing line.
             except:
                 strava_activities_dict = None
                 core_logger.print_to_log_and_console(f"WARNING: Strava activities CSV parsing failed.")
@@ -592,7 +599,7 @@ async def create_activity_with_bulk_import(
         for filename in os.listdir(bulk_import_dir):
             file_path = os.path.join(bulk_import_dir, filename)
 
-            # Check if file is one we can process - by adding in Strava .csv file to that directory we will blow up if we don't filter by file type here.
+            # Check if file is one we can process.
             _, file_extension = os.path.splitext(file_path)
             if file_extension not in supported_file_formats:
                 core_logger.print_to_log_and_console(f"Skipping file {file_path} due to not having the a supported file extension, which are: {supported_file_formats}.")
