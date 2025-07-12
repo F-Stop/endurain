@@ -597,6 +597,50 @@ async def create_activity_with_bulk_import(
             detail="Internal Server Error",
         ) from err
 
+@router.post(
+    "/create/stravabikegearimport",
+)
+async def import_bike_gear_from_Strava_CSV(
+    token_user_id: Annotated[
+        int,
+        Depends(session_security.get_user_id_from_access_token),
+    ],
+    check_scopes: Annotated[
+        Callable, Security(session_security.check_scopes, scopes=["activities:write"])
+    ],
+    db: Annotated[
+        Session,
+        Depends(core_database.get_db),
+    ],
+    background_tasks: BackgroundTasks,
+):
+    try:
+        core_logger.print_to_log_and_console(f"Entering import_bike_gear_from_Strava_CSV backend function")
+        # TO DO - add processing bits here
+
+        # Prompt user for a file.
+
+        # Get file
+
+        # Parse file
+
+        # Iterate through file's gear list
+             # Check if gear exists
+             # Create new gear if gear does not exist
+
+        # Return a success message
+        return {"Gear import successful."}
+    except Exception as err:
+        # Log the exception
+        core_logger.print_to_log(
+            f"Error in import_bike_gear_from_Strava_CSV: {err}", "error"
+        )
+        # Raise an HTTPException with a 500 Internal Server Error status code
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal Server Error",
+        ) from err
+
 
 @router.put(
     "/edit",
