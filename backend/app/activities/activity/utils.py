@@ -312,9 +312,8 @@ def parse_and_store_activity_from_file(
                     # Strava already puts title in the gpx file, which Endurain imports through the file parser. 
 
                     # Activity type is already pulled from the GPX file and dealt with in the parsing routine.
-                    # Get activity type 
-                    # parsed info Schema: activity.activity_type: int
-                    # strava schema: strava_activities[file_base_name]["Activity Type"] : string
+                         # parsed info Schema: activity.activity_type: int
+                         # strava schema: strava_activities[file_base_name]["Activity Type"] : string
 
                     # Get description
                     #core_logger.print_to_log_and_console(f"parsed_info's description was: {parsed_info["activity"].description}")     # Testing code
