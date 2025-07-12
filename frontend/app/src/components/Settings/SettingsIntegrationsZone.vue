@@ -62,6 +62,22 @@
 						<a href="#" class="btn btn-primary" role="button" @click="submitBulkImport">{{ $t("settingsIntegrationsZone.buttonBulkImport") }}</a>
 					</div>
 				</li>
+				<!-- Strava bulk-export import zone -->
+				<li class="list-group-item d-flex justify-content-between bg-body-tertiary px-0">
+					<div class="d-flex align-items-center">
+						<font-awesome-icon :icon="['fas', 'file-import']" size="2x" />
+						<div class="ms-3">
+							<div class="fw-bold">
+								{{ $t("settingsIntegrationsZone.stravaImportIntegrationTitle") }}
+							</div>
+							{{ $t("settingsIntegrationsZone.stravaImportIntegrationBody") }}
+						</div>
+					</div>
+					<div class="d-flex align-items-center">
+						<!-- import button -->
+						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikeGearImport">{{ $t("settingsIntegrationsZone.stravaImportbuttonBikeGear") }}</a>
+					</div>
+				</li>
 				<!-- Garmin Connect zone -->
 				<li class="list-group-item d-flex justify-content-between bg-body-tertiary px-0 pb-0">
 					<div class="d-flex align-items-center">
@@ -288,6 +304,20 @@ export default {
 				// If there is an error, show the error alert.
 				push.error(
 					`${t("settingsIntegrationsZone.errorMessageUnableToImportActivities")} - ${error}`,
+				);
+			}
+		}
+
+		async function submitStravaBikeGearImport() {
+			try {
+				await activities.stravaBikeGearImportActivities();
+
+				// Show the loading alert.
+				push.info(t("settingsIntegrationsZone.loadingMessageStravaBikeGearImport"));
+			} catch (error) {
+				// If there is an error, show the error alert.
+				push.error(
+					`${t("settingsIntegrationsZone.errorMessageUnableToImportBikeGear")} - ${error}`,
 				);
 			}
 		}
