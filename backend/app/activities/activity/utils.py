@@ -300,25 +300,26 @@ def parse_and_store_activity_from_file(
                 db,
             )
 
-            # Check if this is a Strava bulk import.
+            # Check if a Strava bulk import file is present, and check if any additional information can be added to the activity.
             if strava_activities:
                 #core_logger.print_to_log_and_console(f"Entering Strava activities section for activity: {file_base_name}") # testing code
-                if strava_activities.get(file_base_name):  # check if the file has a row in the strava activities dictionary
-                    core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary")
+                # Check if the file we are parsing has data in the Strava activities dictionary
+                if strava_activities.get(file_base_name):
+                    core_logger.print_to_log_and_console(f"Activity {file_base_name} found in strava activities dictionary.") # Testing code
                     core_logger.print_to_log_and_console(f"Strava activities values for this: {strava_activities[file_base_name]}") # Testing code
                     #core_logger.print_to_log_and_console(f"parsed_info is {parsed_info} and its activity is {parsed_info["activity"]}") # Testing code
 
-                    # Strava already puts title in the gpx file.
+                    # Strava already puts title in the gpx file, which Endurain imports through the file parser. 
+
+                    # Activity type is already pulled from the GPX file and dealt with in the parsing routine.
+                    # Get activity type 
+                    # parsed info Schema: activity.activity_type: int
+                    # strava schema: strava_activities[file_base_name]["Activity Type"] : string
 
                     # Get description
                     #core_logger.print_to_log_and_console(f"parsed_info's description was: {parsed_info["activity"].description}")     # Testing code
                     parsed_info["activity"].description = strava_activities[file_base_name]["Activity Description"]
                     #core_logger.print_to_log_and_console(f"parsed_info's description is now: {parsed_info["activity"].description}")  # Testing code
-
-                    # Get activity type 
-                    # parsed info Schema: activity.activity_type: int
-                    # strava schema: strava_activities[file_base_name]["Activity Type"] : string
-                    # STILL TO DO
 
                     # Get equipment 
                     # parsed info Schema: activity.gear_id: int
@@ -328,7 +329,9 @@ def parse_and_store_activity_from_file(
                     # Get Strava activity id 
                     # parsed info Schema: activity.strava_activity_id: int
                     # strava schema: strava_activities[file_base_name]["Activity ID"] : string?
-                    # STILL TO DO
+                    core_logger.print_to_log_and_console(f"parsed_info's activity ID was: {parsed_info["activity"].strava_activity_id}")     # Testing code
+                    parsed_info["activity"].strava_activity_id = int(strava_activities[file_base_name]["Activity ID"])
+                    core_logger.print_to_log_and_console(f"parsed_info's activity ID is now: {parsed_info["activity"].strava_activity_id}")     # Testing code
                     # QUESTION: Will inserting the Strava Activity ID make the strava-syncing portion think this is synced from Strava?
                     # QUESTION: Do we need a flag for "we have imported this from a bulk import" to differentiate this from Strava sync'ing?
 
