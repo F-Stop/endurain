@@ -116,6 +116,9 @@ export const activities = {
 	bulkImportActivities() {
 		return fetchPostRequest("activities/create/bulkimport");
 	},
+	stravaBikeGearImportActivities() {
+		return fetchPostRequest("activities/create/stravabikegearimport");
+	},
 	editActivity(data) {
 		return fetchPutRequest("activities/edit", data);
 	},
