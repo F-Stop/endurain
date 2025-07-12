@@ -478,6 +478,7 @@ export default {
 			submitRetrieveStravaGear,
 			buttonStravaUnlink,
 			submitBulkImport,
+			submitStravaBikeGearImport,
 			submitRetrieveGarminConnectActivitiesDataRange,
 			submitRetrieveGarminConnectActivitiesDays,
 			submitRetrieveGarminConnectGear,
