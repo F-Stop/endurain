@@ -313,6 +313,8 @@ def parse_and_store_activity_from_file(
 
                     # Activity type is already pulled from the GPX file and dealt with in the parsing routine.
                          # parsed info Schema: activity.activity_type: int
+                                # Endurain ID to ride schema stored in /backend/app/activities/activity/utils.py
+                                # In dictionaries: ACTIVITY_ID_TO_NAME and ACTIVITY_NAME_TO_ID
                          # strava schema: strava_activities[file_base_name]["Activity Type"] : string
 
                     # Get description
@@ -321,13 +323,22 @@ def parse_and_store_activity_from_file(
                     #core_logger.print_to_log_and_console(f"parsed_info's description is now: {parsed_info["activity"].description}")  # Testing code
 
                     # Get equipment 
-                    # parsed info Schema: activity.gear_id: int
-                    # strava schema: strava_activities[file_base_name]["Activity Gear"] : string
                     # STILL TO DO
+                    # Equipment background info:
+                         # parsed info uses Endurain Gear schema: activity.gear_id: int
+                              # Endurain gear schema defined in /backend/app/gears/schema.py
+                         # strava-data-dictionary schema: strava_activities[file_base_name]["Activity Gear"] : string
+                    # Relevant functions
+                         # Existing gear for user: gears.crud: get_gear_user(user_id: int, db: Session) -> list[gears_schema.Gear] | None:
+                         # Gear lookup by Strava ID: gears.crud: get_gear_by_strava_id_from_user_id(    gear_strava_id: str, user_id: int, db: Session) -> gears_schema.Gear | None:
+                         # Gear create: gears.crud: create_gear(gear: gears_schema.Gear, user_id: int, db: Session):
+                         # Gear edit: edit_gear(gear_id: int, gear: gears_schema.Gear, db: Session):
+
 
                     # Get Strava activity id 
-                    # parsed info Schema: activity.strava_activity_id: int
-                    # strava schema: strava_activities[file_base_name]["Activity ID"] : string?
+                    # Strava activity ID info:
+                         # parsed info Schema: activity.strava_activity_id: int
+                         # strava-data-dictionary schema: strava_activities[file_base_name]["Activity ID"] : string?
                     core_logger.print_to_log_and_console(f"parsed_info's activity ID was: {parsed_info["activity"].strava_activity_id}")     # Testing code
                     parsed_info["activity"].strava_activity_id = int(strava_activities[file_base_name]["Activity ID"])
                     core_logger.print_to_log_and_console(f"parsed_info's activity ID is now: {parsed_info["activity"].strava_activity_id}")     # Testing code
