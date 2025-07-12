@@ -32,6 +32,9 @@ import activities.activity_streams.schema as activity_streams_schema
 
 import activities.activity_workout_steps.crud as activity_workout_steps_crud
 
+import gears.crud as gears_crud
+import gears.schema as gears_schema
+
 import gpx.utils as gpx_utils
 import fit.utils as fit_utils
 
@@ -333,20 +336,28 @@ def parse_and_store_activity_from_file(
                          # Gear lookup by Strava ID: gears.crud: get_gear_by_strava_id_from_user_id(    gear_strava_id: str, user_id: int, db: Session) -> gears_schema.Gear | None:
                          # Gear create: gears.crud: create_gear(gear: gears_schema.Gear, user_id: int, db: Session):
                          # Gear edit: edit_gear(gear_id: int, gear: gears_schema.Gear, db: Session):
-
+                    user_gear_list = gears_crud.get_gear_user(user.id, db)
+                    core_logger.print_to_log_and_console(f"User's gear list: {user_gear_list}") # Testing code
+                    # UH OH - Details of the gear are not stored in activities.csv.  We need to import / enter the gear list separately from this file parsing process.
+                    #if GEAR NOT FOUND
+                    #     new_gear = gears_schema.Gear(
+                    #         user_id = user.id
+                    #         
+                    #     )
+                    #     gears_crud.create_gear(new_gear, user.id, db)
 
                     # Get Strava activity id 
                     # Strava activity ID info:
                          # parsed info Schema: activity.strava_activity_id: int
                          # strava-data-dictionary schema: strava_activities[file_base_name]["Activity ID"] : string?
-                    core_logger.print_to_log_and_console(f"parsed_info's activity ID was: {parsed_info["activity"].strava_activity_id}")     # Testing code
+                    #core_logger.print_to_log_and_console(f"parsed_info's activity ID was: {parsed_info["activity"].strava_activity_id}")     # Testing code
                     parsed_info["activity"].strava_activity_id = int(strava_activities[file_base_name]["Activity ID"])
-                    core_logger.print_to_log_and_console(f"parsed_info's activity ID is now: {parsed_info["activity"].strava_activity_id}")     # Testing code
+                    #core_logger.print_to_log_and_console(f"parsed_info's activity ID is now: {parsed_info["activity"].strava_activity_id}")     # Testing code
                     # QUESTION: Will inserting the Strava Activity ID make the strava-syncing portion think this is synced from Strava?
                     # QUESTION: Do we need a flag for "we have imported this from a bulk import" to differentiate this from Strava sync'ing?
 
                     # Strava cropping information
-                    #   Not sure how strava saves cropping information - activities.csv only has "Activity Date" and  "Elapsed Time"
+                    #   Not sure how strava saves cropping information in its bulk export - activities.csv only has "Activity Date" and  "Elapsed Time"
 
                     # Strava media - being ignored for now.
                     # strava schema: strava_activities[file_base_name]["Media"] : string that is a "|" separated list of file names
