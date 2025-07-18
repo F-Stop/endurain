@@ -384,6 +384,7 @@ import usSettingsThemeSwitcherComponent from './us/components/settings/settingsG
 import usSettingsLanguageSwitcherComponent from './us/components/settings/settingsGeneralZone/settingsLanguageSwitcherComponent.json';
 import usSettingsUserProfileZoneComponent from './us/components/settings/settingsUserProfileZoneComponent.json';
 import usSettingsSecurityZoneComponent from './us/components/settings/settingsSecurityZoneComponent.json';
+import usSettingsImportZoneComponent from './us/components/settings/settingsImportZoneComponent.json';
 import usSettingsIntegrationsZoneComponent from './us/components/settings/settingsIntegrationsZoneComponent.json';
 import usGarminConnectLoginModalComponent from './us/components/settings/settingsIntegrationsZone/garminConnectLoginModalComponent.json';
 import usUsersAddEditUserModalComponent from './us/components/settings/settingsUsersZone/usersAddEditUserModalComponent.json';
@@ -794,6 +795,7 @@ const messages = {
     settingsUserProfileZone: usSettingsUserProfileZoneComponent,
     settingsSecurityZone: usSettingsSecurityZoneComponent,
     settingsIntegrationsZone: usSettingsIntegrationsZoneComponent,
+    settingsImportZone: usSettingsImportZoneComponent,
     garminConnectLoginModalComponent: usGarminConnectLoginModalComponent,
     usersAddEditUserModalComponent: usUsersAddEditUserModalComponent,
     usersChangeUserPasswordModalComponent: usUsersChangeUserPasswordModalComponent,
