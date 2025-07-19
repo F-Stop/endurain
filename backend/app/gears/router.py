@@ -13,6 +13,8 @@ import core.database as core_database
 import core.logger as core_logger
 import core.config as core_config
 
+import users.user.dependencies as users_dependencies
+
 import os
 import csv
 
@@ -323,6 +325,53 @@ async def import_bikes_from_Strava_CSV(
         # Iterate through file's gear list
              # Check if gear exists
              # Create new gear if gear does not exist
+
+        # Equipment background info:
+            # parsed info uses Endurain Gear schema: activity.gear_id: int
+                 # Endurain gear schema defined in /backend/app/gears/schema.py
+        # Relevant functions
+             # Existing gear for user: gears.crud: get_gear_user(user_id: int, db: Session) -> list[gears_schema.Gear] | None:
+             # Gear lookup by Strava ID: gears.crud: get_gear_by_strava_id_from_user_id(    gear_strava_id: str, user_id: int, db: Session) -> gears_schema.Gear | None:
+             # Gear create: gears.crud: create_gear(gear: gears_schema.Gear, user_id: int, db: Session):
+             # Gear edit: edit_gear(gear_id: int, gear: gears_schema.Gear, db: Session):
+        print("Getting user gear list") # Testing code
+        user_gear_list = gears_crud.get_gear_user(token_user_id, db)
+        #print("Gotten user gear list") # Testing code
+        core_logger.print_to_log_and_console(f"User's gear list: {user_gear_list}") # Testing code
+        if user_gear_list is None:
+             #User has no gear - we can just add our own straight up.
+             users_existing_gear_nicknames = None
+             core_logger.print_to_log_and_console(f"User has no existing gear.  Adding all Strava gear.") # Testing code
+        else:
+             #User has gear - we need to check for duplicates.  Currently checking by nickname.
+             core_logger.print_to_log_and_console(f"User has some existing gear. Will only import gear that is not already present (by checking for nicknames).") # Testing code
+             users_existing_gear_nicknames = []
+             for item in user_gear_list:
+                  print("Gear item: ", item) # Testing code
+                  print("ID: ", item.id) # Testing code
+                  print("Brand: ", item.brand) # Testing code
+                  print("Model: ", item.model) # Testing code
+                  print("Nickname: ", item.nickname) # Testing code
+                  print("Gear type: ", item.gear_type) # Testing code
+                  print("User: ", item.user_id) # Testing code
+                  print("Created at: ", item.created_at) # Testing code
+                  print("is_active: ", item.is_active) # Testing code
+                  print("strava ID: ", item.strava_gear_id) # Testing code
+                  print("Gear item listing done.") # Testing code
+                  users_existing_gear_nicknames.append(item.nickname)
+        print("User existing gear list is: ", users_existing_gear_nicknames) # Testing code
+        for bike in bikes_dict:  # bike here is the nickname of the bike from Strava
+             print("In bikes_dict iterator - bike is: ", bike) # Testing code
+             #print("In bikes_dict iterator - bike brand is: ", bikes_dict[bike]["Bike Brand"]) # Testing code
+             if bike in users_existing_gear_nicknames:
+                   core_logger.print_to_log_and_console(f"Bike - {bike} - found in existing user gear.  Skipping import.")
+             else:
+                   core_logger.print_to_log_and_console(f"Bike - {bike} - not found in existing user gear. Importing.")
+                  # new_gear = gears_schema.Gear(
+                  #       user_id = token_user_id
+                  #      
+                  #      )
+                  #gears_crud.create_gear(new_gear, user.id, db)
 
         # Return a success message
         return {"Gear import successful."}
