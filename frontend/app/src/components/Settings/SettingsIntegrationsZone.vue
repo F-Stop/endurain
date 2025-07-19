@@ -262,34 +262,6 @@ export default {
 			}
 		}
 
-		async function submitBulkImport() {
-			try {
-				await activities.bulkImportActivities();
-
-				// Show the loading alert.
-				push.info(t("settingsIntegrationsZone.loadingMessageBulkImport"));
-			} catch (error) {
-				// If there is an error, show the error alert.
-				push.error(
-					`${t("settingsIntegrationsZone.errorMessageUnableToImportActivities")} - ${error}`,
-				);
-			}
-		}
-
-		async function submitStravaBikeGearImport() {
-			try {
-				await activities.stravaBikeGearImportActivities();
-
-				// Show the loading alert.
-				push.info(t("settingsIntegrationsZone.loadingMessageStravaBikeGearImport"));
-			} catch (error) {
-				// If there is an error, show the error alert.
-				push.error(
-					`${t("settingsIntegrationsZone.errorMessageUnableToImportBikeGear")} - ${error}`,
-				);
-			}
-		}
-
 		async function submitRetrieveGarminConnectActivitiesDays(days) {
 			try {
 				// Calculate the date range
@@ -445,8 +417,6 @@ export default {
 			submitRetrieveStravaActivities,
 			submitRetrieveStravaGear,
 			buttonStravaUnlink,
-			submitBulkImport,
-			submitStravaBikeGearImport,
 			submitRetrieveGarminConnectActivitiesDataRange,
 			submitRetrieveGarminConnectActivitiesDays,
 			submitRetrieveGarminConnectGear,
