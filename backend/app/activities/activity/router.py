@@ -17,6 +17,7 @@ import session.security as session_security
 import users.user.dependencies as users_dependencies
 import garmin.activity_utils as garmin_activity_utils
 import strava.activity_utils as strava_activity_utils
+import csv
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -626,13 +627,36 @@ async def import_bike_gear_from_Strava_CSV(
 ):
     try:
         core_logger.print_to_log_and_console(f"Entering import_bike_gear_from_Strava_CSV backend function")
+        bulk_import_dir = core_config.FILES_BULK_IMPORT_DIR
         # TO DO - add processing bits here
 
         # Prompt user for a file.
 
-        # Get file
+        # Hard coding file for now
+        bikegearfilename = "bikes.csv"
 
-        # Parse file
+        # Get file and parse it
+        bikegear_dict = {}  # format: "Bike Name" from the Strava CSV is used as the key, which then holds a dictionary that is based on the Strava bike gear CSV file's data
+        bikegear_file_path = os.path.join(bulk_import_dir, bikegearfilename)
+        try:
+            if os.path.isfile(bikegear_file_path):
+                  core_logger.print_to_log_and_console(f"bikes.csv file exists in bulk_import directory. Starting to process file.")
+                  with open(bikegear_file_path, "r") as gear_file:
+                      bike_gear_csv = csv.DictReader(gear_file)
+                      for row in bike_gear_csv:    # Must process CSV file object while file is still open.
+                          # Example row: {'Bike Name': 'Ox', 'Bike Brand': 'Bianchi', 'Bike Model': 'Advantage', 'Bike Default Sport Types': 'Ride'}
+                          #print("Full row is", row) # Testing code
+                          bikegear_dict[row["Bike Name"]] = row
+                          #print("Dicinotary row is: ", bikegear_dict[row["Bike Name"]])  # Testing code
+                          #print("Bike brand is: ", bikegear_dict[row["Bike Name"]]["Bike Brand"]) # Testing code
+                  core_logger.print_to_log_and_console(f"Strava bike gear csv file parsed and gear dictionary created. File was {len(bikegear_dict)} rows long, ignoring header row.")
+            else:
+                  core_logger.print_to_log_and_console(f"No bikes.csv file located.")
+                  return None # Nothing to return - no file.
+        except:
+            # TO DO: RAISE ERROR HERE?
+            core_logger.print_to_log_and_console(f"Error attempting to open bikes.csv file.")
+                  return None # Nothing to return - error parsing file.
 
         # Iterate through file's gear list
              # Check if gear exists
