@@ -1,6 +1,6 @@
 {
     "bulkImportIntegrationTitle": "Bulk import",
-    "bulkImportIntegrationBody": "Bulk import activities from files stored in the bulk_import folder",
+    "bulkImportIntegrationBody": "Bulk import activities from files stored in the files/bulk_import folder",
     "buttonBulkImport": "Import",
     "stravaImportbuttonActivities": "Activities import",
     "loadingMessageBulkImport": "Importing activities",
