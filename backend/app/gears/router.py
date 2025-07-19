@@ -17,6 +17,8 @@ import users.user.dependencies as users_dependencies
 
 import os
 import csv
+from datetime import datetime
+from datetime import date
 
 # Define the API router
 router = APIRouter()
@@ -289,6 +291,8 @@ async def import_bikes_from_Strava_CSV(
     ],
     background_tasks: BackgroundTasks,
 ):
+    import_time_iso = datetime.today().date().strftime('%Y-%m-%d')
+    print("import time is: ", import_time_iso)
     try:
         core_logger.print_to_log_and_console(f"Entering import_bikes_from_Strava_CSV backend function")
         bulk_import_dir = core_config.FILES_BULK_IMPORT_DIR
@@ -361,18 +365,25 @@ async def import_bikes_from_Strava_CSV(
                   users_existing_gear_nicknames.append(item.nickname)
         print("User existing gear list is: ", users_existing_gear_nicknames) # Testing code
         for bike in bikes_dict:  # bike here is the nickname of the bike from Strava
-             print("In bikes_dict iterator - bike is: ", bike) # Testing code
+             core_logger.print_to_log_and_console(f"In bikes_dict iterator.  Current bike is - {bike}") # Testing code.
              #print("In bikes_dict iterator - bike brand is: ", bikes_dict[bike]["Bike Brand"]) # Testing code
              if bike in users_existing_gear_nicknames:
                    core_logger.print_to_log_and_console(f"Bike - {bike} - found in existing user gear.  Skipping import.")
              else:
                    core_logger.print_to_log_and_console(f"Bike - {bike} - not found in existing user gear. Importing.")
-                  # new_gear = gears_schema.Gear(
-                  #       user_id = token_user_id
-                  #      
-                  #      )
-                  #gears_crud.create_gear(new_gear, user.id, db)
-
+                   # Note - hard-coding gear type of bike to be 1 here - CHANGE TO DYNAMIC 
+                   new_gear = gears_schema.Gear(
+                         user_id = token_user_id,
+                         brand = bikes_dict[bike]["Bike Brand"],
+                         model = bikes_dict[bike]["Bike Model"],
+                         nickname = bike,
+                         gear_type = 1,
+                         created_at = import_time_iso,
+                         is_active = True,
+                         strava_gear_id = None
+                        )
+                   gears_crud.create_gear(new_gear, token_user_id, db)
+                   core_logger.print_to_log_and_console(f"Bike - {bike} - has been imported.")
         # Return a success message
         return {"Gear import successful."}
     except Exception as err:
