@@ -632,7 +632,7 @@ async def import_bike_gear_from_Strava_CSV(
         return {"Gear import successful."}
     except Exception as err:
         # Log the exception
-        core_logger.print_to_log(
+        core_logger.print_to_log_and_console(
             f"Error in import_bike_gear_from_Strava_CSV: {err}", "error"
         )
         # Raise an HTTPException with a 500 Internal Server Error status code
