@@ -7,7 +7,7 @@
     "errorMessageUnableToImportActivities": "An error occurred while importing activities",
     "stravaImportIntegrationTitle": "Strava import",
     "stravaImportIntegrationBody": "Import items from a Strava bulk export (BETA - use with caution)",
-    "stravaImportbuttonBikeGear": "Bike gear import",
-    "loadingMessageStravaBikeGearImport": "Importing bike gear",
-    "errorMessageUnableToImportBikeGear": "An error occurred while importing Stavabike gear"
+    "stravaImportbuttonBikes": "Bikes import",
+    "loadingMessageStravaBikesImport": "Importing bikes",
+    "errorMessageUnableToImportBikes": "An error occurred while importing Stava bikes"
 }

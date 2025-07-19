@@ -33,7 +33,7 @@
 					</div>
 					<div class="d-flex align-items-center">
 						<!-- import button -->
-						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikeGearImport">{{ $t("settingsImportZone.stravaImportbuttonBikeGear") }}</a>
+						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikesImport">{{ $t("settingsImportZone.stravaImportbuttonBikes") }}</a>
 					</div>
 				</li>
 			</ul>
@@ -52,6 +52,7 @@ import { useAuthStore } from "@/stores/authStore";
 // Importing the services
 //import { strava } from "@/services/stravaService";
 import { activities } from "@/services/activitiesService";
+import { gears } from "@/services/gearsService";
 //import { garminConnect } from "@/services/garminConnectService";
 // Import the components
 import ModalComponent from "@/components/Modals/ModalComponent.vue";
@@ -77,25 +78,25 @@ export default {
 				await activities.bulkImportActivities();
 
 				// Show the loading alert.
-				push.info(t("settingsIntegrationsZone.loadingMessageBulkImport"));
+				push.info(t("settingsImportZone.loadingMessageBulkImport"));
 			} catch (error) {
 				// If there is an error, show the error alert.
 				push.error(
-					`${t("settingsIntegrationsZone.errorMessageUnableToImportActivities")} - ${error}`,
+					`${t("settingsImportZone.errorMessageUnableToImportActivities")} - ${error}`,
 				);
 			}
 		}
 
-		async function submitStravaBikeGearImport() {
+		async function submitStravaBikesImport() {
 			try {
-				await activities.stravaBikeGearImportActivities();
+				await gears.stravaBikesImport();
 
 				// Show the loading alert.
-				push.info(t("settingsIntegrationsZone.loadingMessageStravaBikeGearImport"));
+				push.info(t("settingsImportZone.loadingMessageStravaBikesImport"));
 			} catch (error) {
 				// If there is an error, show the error alert.
 				push.error(
-					`${t("settingsIntegrationsZone.errorMessageUnableToImportBikeGear")} - ${error}`,
+					`${t("settingsImportZone.errorMessageUnableToImportBikes")} - ${error}`,
 				);
 			}
 		}
@@ -105,7 +106,7 @@ export default {
 			authStore,
 			t,
 			submitBulkImport,
-			submitStravaBikeGearImport,
+			submitStravaBikesImport,
 		};
 	},
 };
