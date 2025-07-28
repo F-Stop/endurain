@@ -69,14 +69,29 @@ import ModalComponentUploadFile from "@/components/Modals/ModalComponentUploadFi
 const submitStravaBikesImportFromUploadedCSV = async (file) => {
 	// Set the loading message
 	const notification = push.promise(t("settingsImportZone.loadingMessageStravaBikesUploadImport"));
-	try {
+	if (file) {
+		// Create the form data
+		const formData = new FormData();
+		formData.append("file", file);
+		try {
+			// Upload the file
+			const importsuccess =
+				await gears.stravaBikesImportfromUpload(formData);
+			// Set the success message
+			notification.resolve(t("settingsImportZone.successMessageStravaBikesUploadImport"));
+		} catch (error) {
+			// Set the error message
+			notification.reject(`${error}`);
+		}
+	}
+	//try {
 		// TESTING await gears.stravaBikesImport();
 		// Show the loading alert.
-		push.info(t("settingsImportZone.loadingMessageStravaBikesUploadImport"));
-	} catch (error) {
+		//push.info(t("settingsImportZone.loadingMessageStravaBikesUploadImport"));
+	//} catch (error) {
 		// If there is an error, show the error alert.
-		push.error(`${t("settingsImportZone.errorMessageUnableToImportBikesFromUpload")} - ${error}`,);
-	}
+		//push.error(`${t("settingsImportZone.errorMessageUnableToImportBikesFromUpload")} - ${error}`,);
+	//}
 };
 
 const authStore = useAuthStore();
