@@ -34,12 +34,19 @@
 					<div class="d-flex align-items-center">
 						<!-- import button -->
 						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikesImport">{{ $t("settingsImportZone.stravaImportbuttonBikes") }}</a>
-					<div class="d-flex align-items-center">
 						<!-- import button -->
-						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikesImportFromUploadedCSV">{{ $t("settingsImportZone.stravaImportbuttonBikesUpload") }}</a>
+						<a href="#" class="btn btn-primary" role="button"  data-bs-toggle="modal"
+							data-bs-target="#uploadBikesCSVModal">
+							{{ $t("settingsImportZone.stravaImportbuttonBikesUpload") }}</a>
 					</div>
 				</li>
 			</ul>
+
+			<!-- Modal upload CSV for bikes -->
+			<ModalComponentUploadFile modalId="uploadBikesCSVModal" :title="$t('settingsImportZone.stravaImportbuttonBikesUpload')"
+				:fileFieldLabel="$t('settingsImportZone.fieldLabelCSVUploadFileType')" filesAccepted=".csv"
+				actionButtonType="success" :actionButtonText="$t('settingsImportZone.stravaImportbuttonBikesUpload')"
+				@fileToEmitAction="submitStravaBikesImportFromUploadedCSV" />
 
 		</div>
 	</div>
@@ -95,7 +102,7 @@ export default {
 				);
 			}
 		}
-		async function submitStravaBikesImportFromUploadedCSV() {
+		const function submitStravaBikesImportFromUploadedCSV() = async (file) => {
 			try {
 				// TESTING await gears.stravaBikesImport();
 				// Show the loading alert.
