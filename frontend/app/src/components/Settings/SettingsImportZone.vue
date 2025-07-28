@@ -75,8 +75,8 @@ const submitStravaBikesImportFromUploadedCSV = async (file) => {
 		formData.append("file", file);
 		try {
 			// Upload the file
-			const importsuccess =
-				await gears.stravaBikesImportfromUpload(formData);
+			//const importsuccess = await gears.stravaBikesImportfromUpload(formData);
+			await gears.stravaBikesImportfromUpload(formData);
 			// Set the success message
 			notification.resolve(t("settingsImportZone.successMessageStravaBikesUploadImport"));
 		} catch (error) {
