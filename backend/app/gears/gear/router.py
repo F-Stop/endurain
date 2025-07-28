@@ -1,6 +1,6 @@
 from typing import Annotated, Callable
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, Security
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, Security, UploadFile
 from sqlalchemy.orm import Session
 
 import session.security as session_security
@@ -14,6 +14,8 @@ import core.logger as core_logger
 import core.config as core_config
 
 import users.user.dependencies as users_dependencies
+
+import websocket.schema as websocket_schema
 
 import os
 import csv
@@ -271,6 +273,43 @@ async def delete_gear(
 
     # Return success message
     return {"detail": f"Gear ID {gear_id} deleted successfully"}
+
+
+@router.post(
+    "/stravabikesimportfromupload",
+    status_code=201,
+)
+async def import_bikes_from_Strava_CSV_uploaded_file(
+    token_user_id: Annotated[
+        int,
+        Depends(session_security.get_user_id_from_access_token),
+    ],
+    file: UploadFile,
+    check_scopes: Annotated[
+        Callable, Security(session_security.check_scopes, scopes=["activities:write"])
+    ],
+    websocket_manager: Annotated[
+        websocket_schema.WebSocketManager,
+        Depends(websocket_schema.get_websocket_manager),
+    ],
+    db: Annotated[
+        Session,
+        Depends(core_database.get_db),
+    ],
+):
+    try:
+        core_logger.print_to_log_and_console(f"Entering import_bikes_from_Strava_CSV_uploaded_file backend function")
+        return {"Gear import successful."}
+    except Exception as err:
+        # Log the exception
+        core_logger.print_to_log_and_console(
+            f"Error in import_bikes_from_Strava_CSV_uploaded_file: {err}", "error"
+        )
+        # Raise an HTTPException with a 500 Internal Server Error status code
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal Server Error",
+        ) from err
 
 
 @router.post(
