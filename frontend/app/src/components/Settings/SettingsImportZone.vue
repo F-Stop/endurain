@@ -34,6 +34,9 @@
 					<div class="d-flex align-items-center">
 						<!-- import button -->
 						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikesImport">{{ $t("settingsImportZone.stravaImportbuttonBikes") }}</a>
+					<div class="d-flex align-items-center">
+						<!-- import button -->
+						<a href="#" class="btn btn-primary" role="button" @click="submitStravaBikesImportFromUploadedCSV">{{ $t("settingsImportZone.stravaImportbuttonBikesUpload") }}</a>
 					</div>
 				</li>
 			</ul>
@@ -89,6 +92,18 @@ export default {
 				// If there is an error, show the error alert.
 				push.error(
 					`${t("settingsImportZone.errorMessageUnableToImportBikes")} - ${error}`,
+				);
+			}
+		}
+		async function submitStravaBikesImportFromUploadedCSV() {
+			try {
+				// TESTING await gears.stravaBikesImport();
+				// Show the loading alert.
+				push.info(t("settingsImportZone.loadingMessageStravaBikesUploadImport"));
+			} catch (error) {
+				// If there is an error, show the error alert.
+				push.error(
+					`${t("settingsImportZone.errorMessageUnableToImportBikesFromUpload")} - ${error}`,
 				);
 			}
 		}
