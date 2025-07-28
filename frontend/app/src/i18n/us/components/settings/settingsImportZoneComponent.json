@@ -9,7 +9,7 @@
     "stravaImportIntegrationBody": "Import items from a Strava bulk export (BETA - use with caution)",
     "stravaImportbuttonBikes": "Bikes import (from bulk_import folder)",
     "loadingMessageStravaBikesImport": "Importing bikes from CSV file on server",
-    "errorMessageUnableToImportBikes": "An error occurred while importing Stava bikes from CSV file on server"
+    "errorMessageUnableToImportBikes": "An error occurred while importing Stava bikes from CSV file on server",
     "stravaImportbuttonBikesUpload": "Bikes import (upload a csv)",
     "loadingMessageStravaBikesUploadImport": "Importing bikes from an uploaded CSV file",
     "errorMessageUnableToImportBikesFromUpload": "An error occurred while importing Stava bikes from an uploaded CSV file"
