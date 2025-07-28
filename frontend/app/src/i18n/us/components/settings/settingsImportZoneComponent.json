@@ -13,5 +13,6 @@
     "stravaImportbuttonBikesUpload": "Bikes import (upload a csv)",
     "fieldLabelCSVUploadFileType": "Upload .csv file",
     "loadingMessageStravaBikesUploadImport": "Importing bikes from an uploaded CSV file",
+    "successMessageStravaBikesUploadImport": "Successfully imported bikes from an uploaded CSV file!",
     "errorMessageUnableToImportBikesFromUpload": "An error occurred while importing Stava bikes from an uploaded CSV file"
 }
